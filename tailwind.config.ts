@@ -11,6 +11,10 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        speedblue: '#4159F3'
+      },
+      fontFamily : {
+        jetbrains: ['JetBrains', 'sans-serif']
       },
     },
   },
