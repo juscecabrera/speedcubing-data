@@ -5,15 +5,14 @@ import sessionDataJSON from '../data.json'
 
 // Interfaz para una sola sesión (entrada individual)
 interface SessionEntry {
-  [key: string]: (string | number)[]; // Cada clave numérica apunta a una tupla de 3 elementos
+  [key: string]: (string | number)[]; 
 }
 
 // Interfaz para el conjunto completo de datos de sesión
-interface SessionData {
-  [sessionName: string]: SessionEntry; // Permite múltiples sesiones (session1, session2, etc.)
-}
+// interface SessionData {
+//   [sessionName: string]: SessionEntry; // Permite múltiples sesiones (session1, session2, etc.)
+// }
 
-// 1. Define el tipo de datos del contexto
 interface TimerContextType {
   isRunning: boolean;
   setIsRunning: (running: boolean) => void;
@@ -22,10 +21,8 @@ interface TimerContextType {
   sessionData: SessionEntry;
 }
 
-// 2. Crea el contexto
 const TimerContext = createContext<TimerContextType | undefined>(undefined);
 
-// 3. Crea el proveedor del contexto
 export const TimerProvider = ({ children }: { children: ReactNode }) => {
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [showDetails, setshowDetails] = useState<string | null>(null);
@@ -39,7 +36,6 @@ export const TimerProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-// 4. Hook personalizado para usar el contexto más fácilmente
 export const useTimer = () => {
   const context = useContext(TimerContext);
   if (context === undefined) {
