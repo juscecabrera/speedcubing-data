@@ -8,7 +8,7 @@ import { useTimer } from '../contexts/TimerContext';
 
 
 const StatsSM = () => {
-  const { isRunning, setIsRunning } = useTimer()
+  const { isRunning } = useTimer()
 
 
   return (

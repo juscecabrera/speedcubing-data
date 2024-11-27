@@ -2,9 +2,6 @@
 
 import React from 'react'
 import clipboard from '../svg/clipboard.svg'
-import dnf from '../svg/dnf.svg'
-import ok from '../svg/ok.svg'
-import plus2Logo from '../svg/plus2.svg'
 import deleteLogo from '../svg/delete.svg'
 import arrowSmall from '../svg/arrowSmall.svg'
 import Image from 'next/image'
@@ -56,6 +53,8 @@ const TimeCardDetail = () => {
                 <div className='flex flex-row gap-3'>
                     <button className='flex items-center justify-center bg-red-500 w-12 h-10 border-black border-[1px] rounded-[15px]'>
                         <Image src={deleteLogo} alt='delete logo' />
+                        {/* <p>ELIMINAR</p> */}
+                        {/* La x parece que es para cerrar la ventana pero es para borra el solve */}
                     </button>
 
                     <button 

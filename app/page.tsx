@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Main from "./components/Main";
 import Times from "./components/Times";
 import StatsSM from "./components/StatsSM";
