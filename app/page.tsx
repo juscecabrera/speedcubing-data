@@ -1,7 +1,6 @@
 import Main from "./components/Main";
 import Times from "./components/Times";
 import StatsSM from "./components/StatsSM";
-import TimeCardDetail from "./components/TimeCardDetail";
 import { TimerProvider } from "./contexts/TimerContext";
 
 export default function Home() {
@@ -11,7 +10,6 @@ export default function Home() {
         <Main />
         <Times />
         <StatsSM />
-        <TimeCardDetail />
 
       </TimerProvider>
     </div>

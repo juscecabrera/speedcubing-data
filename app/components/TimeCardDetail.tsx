@@ -7,20 +7,27 @@ import arrowSmall from '../svg/arrowSmall.svg'
 import Image from 'next/image'
 import { useTimer } from '../contexts/TimerContext';
 
+interface TimeCardDetailProps {
+    id: string;
+    time: number;
+    scramble: string;
+    date: string;
+  }
 
-const TimeCardDetail = () => {
-  const { showDetails, setshowDetails } = useTimer()
 
+const TimeCardDetail = ({ id, time, scramble, date }: TimeCardDetailProps ) => {
+  const { setshowDetails } = useTimer()
+
+  const handleClose = () => setshowDetails(null);
 
   return (
     <>
-        {showDetails ?
-        <div className='text-black absolute w-full h-full flex justify-center items-center top-0 left-0 bg-black bg-opacity-30'>
+        <div className='text-black fixed w-screen h-screen flex justify-center items-center top-0 left-0 bg-black bg-opacity-30 z-10'>
             <div className='bg-white w-[344px] h-[467px] rounded-[20px] border-2 border-black flex flex-col justify-between items-center p-5 text-center'>
-                <p className='text-2xl border-black border-b-2 w-1/2'>599</p>
-                <p className='text-4xl'>12.30</p>
-                <p className='text-md'>U R2 B2 F2 U’ R2 B2 U2 F2 U’ L2 U L R’ U B’ L R2 B’ R F</p>
-                <p className='text-lg'>27 nov 2024, 10:40hrs</p>
+                <p className='text-2xl border-black border-b-2 w-1/2'>{id}</p>
+                <p className='text-4xl'>{time}</p>
+                <p className='text-md'>{scramble}</p>
+                <p className='text-lg'>{date}</p>
 
 
                 <div className='flex flex-row gap-5'>
@@ -59,7 +66,7 @@ const TimeCardDetail = () => {
 
                     <button 
                         className='flex items-center justify-center bg-speedblue w-12 h-10 border-black border-[1px] rounded-[15px]'
-                        onClick={() => setshowDetails(false)}    
+                        onClick={handleClose}    
                     >
                         <Image src={arrowSmall} alt='ok logo' />
                     </button>
@@ -67,8 +74,6 @@ const TimeCardDetail = () => {
                 </div>
             </div>
         </div>
-        :''
-        }
     </>
   )
 }
