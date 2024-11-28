@@ -45,7 +45,7 @@ const Main = () => {
     if (isRunning) {
       
       const recordedTime = solveRef.current
-      const storedData = localStorage.getItem('cubingData');
+      const storedData = window.localStorage.getItem('cubingData');
 
       if (storedData) {
 
@@ -59,7 +59,7 @@ const Main = () => {
         //cambiar esto para cada session
         cubingData.session1[nextIndex] = newTime;
         
-        localStorage.setItem('cubingData', JSON.stringify(cubingData));
+        window.localStorage.setItem('cubingData', JSON.stringify(cubingData));
 
         // Generar un nuevo scramble al detener el timer
         const newScramble = generateScramble();

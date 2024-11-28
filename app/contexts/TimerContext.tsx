@@ -31,14 +31,14 @@ export const TimerProvider = ({ children }: { children: ReactNode }) => {
 
   let storedData
   useEffect(() => {
-    storedData = localStorage.getItem('cubingData');
+    storedData = window.localStorage.getItem('cubingData');
   }, [])
   
 
   if (!storedData) {
     //si no hay data, inicializarla
     const cubingData = {session1: {}}
-    localStorage.setItem('cubingData', JSON.stringify(cubingData))
+    window.localStorage.setItem('cubingData', JSON.stringify(cubingData))
   } 
 
   const sessionData: string = storedData ? storedData : JSON.stringify({ session1: {} });
