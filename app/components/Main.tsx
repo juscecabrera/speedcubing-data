@@ -7,7 +7,7 @@ const Main = () => {
   const [time, setTime] = useState<number>(0);
   const [scramble, setScramble] = useState<string>('');
   const [previousScramble, setPreviousScramble] = useState<string>('');
-  const { isRunning, setIsRunning, sessionData } = useTimer()
+  const { isRunning, setIsRunning } = useTimer()
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const solveRef = useRef<number>(0)
 
@@ -53,7 +53,7 @@ const Main = () => {
         const formattedDate = `${actualDate.getDate()} ${actualDate.toLocaleString('es-ES', { month: 'short' })} ${actualDate.getFullYear()}, ${actualDate.getHours().toString().padStart(2, '0')}:${actualDate.getMinutes().toString().padStart(2, '0')}:${actualDate.getSeconds().toString().padStart(2, '0')}hrs`;
 
         const cubingData = JSON.parse(storedData);
-        const newTime = [recordedTime / 1000, scramble, formattedDate];
+        const newTime = [recordedTime / 1000, previousScramble, formattedDate];
         
         const nextIndex = Object.keys(cubingData.session1).length + 1;
         //cambiar esto para cada session
