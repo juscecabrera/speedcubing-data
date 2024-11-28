@@ -7,7 +7,7 @@ const Main = () => {
   const [time, setTime] = useState<number>(0);
   const [scramble, setScramble] = useState<string>('');
   const [previousScramble, setPreviousScramble] = useState<string>('');
-  const { isRunning, setIsRunning } = useTimer()
+  const { isRunning, setIsRunning, addTime } = useTimer()
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const solveRef = useRef<number>(0)
 
@@ -45,7 +45,7 @@ const Main = () => {
     if (isRunning) {
       
       const recordedTime = solveRef.current
-      const storedData = window.localStorage.getItem('cubingData');
+      const storedData = localStorage.getItem('cubingData');
 
       if (storedData) {
 
@@ -55,11 +55,12 @@ const Main = () => {
         const cubingData = JSON.parse(storedData);
         const newTime = [recordedTime / 1000, previousScramble, formattedDate];
         
-        const nextIndex = Object.keys(cubingData.session1).length + 1;
-        //cambiar esto para cada session
-        cubingData.session1[nextIndex] = newTime;
+        // const nextIndex = Object.keys(cubingData.session1).length + 1;
+        // //cambiar esto para cada session
+        // cubingData.session1[nextIndex] = newTime;
+        addTime(newTime)
         
-        window.localStorage.setItem('cubingData', JSON.stringify(cubingData));
+        localStorage.setItem('cubingData', JSON.stringify(cubingData));
 
         // Generar un nuevo scramble al detener el timer
         const newScramble = generateScramble();
@@ -83,19 +84,21 @@ const Main = () => {
     setIsRunning(!isRunning);
   };
 
-  // Capturar evento de teclado
-  useEffect(() => {
-    //agregar que tiene que mantener presionado y al soltarlo es cuando empieza
+ // Capturar evento de teclado
+ useEffect(() => {
+  // Aseguramos que este código solo se ejecute en el navegador
+  if (typeof window !== 'undefined') {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.code === 'Space') {
-        event.preventDefault(); 
+        event.preventDefault();
         startStopTimer();
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isRunning]);
+  }
+}, [isRunning]);
 
   // Formatear el tiempo en minutos:segundos
   const formatTime = (ms: number) => {
@@ -109,28 +112,10 @@ const Main = () => {
     }
   };
 
-  /*
-  Funcionalidad basica:
-  1. (LISTO) Si el temporizador esta parado, al presionar se tiene que: reiniciar el contador e iniciar nuevamente
-  2. (LISTO) Si el temporizador esta corriendo, cambiar la interfaz
-  3. Si se para el temporizador, 
-    (LISTO) volver a la interfaz anterior, 
-    cambiar el scramble, 
-    (LISTO) mostrar el tiempo, 
-    (LISTO)registrar el tiempo en la bd, 
-    (LISTO)crear una nueva timecard 
-  */
-
-
   return (
     <div className='w-screen h-screen flex flex-col justify-center items-center'>
       <div className='flex flex-col justify-center items-center gap-16'>
-        {/* Scramble */}
-        {isRunning
-        ? <p></p>
-        : <p className='text-3xl'>{scramble}</p> }
-
-        {/* Tiempo */}
+        {isRunning ? <></> : <p className='text-3xl'>{scramble}</p> }
         <h1 className="text-8xl ">{formatTime(time)}</h1>
       </div>
     </div>

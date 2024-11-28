@@ -1,5 +1,6 @@
 'use client'
 
+// import { useState, useEffect } from 'react';
 import TimeCard from './TimeCard'
 import { useTimer } from '../contexts/TimerContext';
 
@@ -12,6 +13,9 @@ interface SessionData {
 const Times = () => {
   const { isRunning, sessionData } = useTimer()
   
+  // Estado local para almacenar los tiempos
+  // const [times, setTimes] = useState<[number, string, string][]>([]);
+
   // Verificar que sessionData no es null o undefined antes de hacer el parse
   let sessionDataJSON: SessionData = { session1: {} };
   if (sessionData) {

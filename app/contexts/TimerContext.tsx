@@ -20,6 +20,7 @@ interface TimerContextType {
   sessionData: string | null;
   showStats: boolean;
   setshowStats: (running: boolean) => void;
+  addTime: (newTime: any) => void; // Nueva función para agregar tiempos
 }
 
 const TimerContext = createContext<TimerContextType | undefined>(undefined);
@@ -28,23 +29,36 @@ export const TimerProvider = ({ children }: { children: ReactNode }) => {
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [showDetails, setshowDetails] = useState<string | null>(null);
   const [showStats, setshowStats] = useState<boolean>(false);
-
-  let storedData
-  useEffect(() => {
-    storedData = window.localStorage.getItem('cubingData');
-  }, [])
+  const [sessionData, setSessionData] = useState<string | null>(null);
   
+  useEffect(() => {
+    // Solo accedemos a localStorage en el cliente (navegador)
+    if (typeof window !== 'undefined') {
+      let storedData = localStorage.getItem('cubingData');
+      
+      if (!storedData) {
+        // Si no hay datos, inicializamos localStorage
+        const cubingData = { session1: {} };
+        localStorage.setItem('cubingData', JSON.stringify(cubingData));
+        storedData = JSON.stringify(cubingData);
+      }
 
-  if (!storedData) {
-    //si no hay data, inicializarla
-    const cubingData = {session1: {}}
-    window.localStorage.setItem('cubingData', JSON.stringify(cubingData))
-  } 
+      setSessionData(storedData);
+    }
+  }, []);
 
-  const sessionData: string = storedData ? storedData : JSON.stringify({ session1: {} });
+  const addTime = (newTime: any) => {
+    const storedData = localStorage.getItem('cubingData');
+    if (storedData) {
+      const cubingData = JSON.parse(storedData);
+      const nextIndex = Object.keys(cubingData.session1).length + 1;
+      cubingData.session1[nextIndex] = newTime;
+      localStorage.setItem('cubingData', JSON.stringify(cubingData));
+    }
+  };
 
   return (
-    <TimerContext.Provider value={{ isRunning, setIsRunning, showDetails, setshowDetails, sessionData, setshowStats, showStats }}>
+    <TimerContext.Provider value={{ isRunning, setIsRunning, showDetails, setshowDetails, sessionData, setshowStats, showStats, addTime }}>
       {children}
     </TimerContext.Provider>
   );
