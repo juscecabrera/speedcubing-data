@@ -10,7 +10,6 @@ interface TimeCardProps {
   data: (string | number)[];
 }
 
-
 const TimeCard: React.FC<TimeCardProps> = ({ id, data }) => {
   const { showDetails, setshowDetails } = useTimer()
 

@@ -5,26 +5,87 @@ import { useTimer } from '../contexts/TimerContext';
 
 const Main = () => {
   const [time, setTime] = useState<number>(0);
-  const { isRunning, setIsRunning } = useTimer()
+  const [scramble, setScramble] = useState<string>('');
+  const [previousScramble, setPreviousScramble] = useState<string>('');
+  const { isRunning, setIsRunning, sessionData } = useTimer()
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const solveRef = useRef<number>(0)
+
+  //generar scrambles aleatorios y asignarlos
+  const generateScramble = (length = 20): string => {
+    const moves = ["R", "L", "U", "D", "F", "B"];
+    const modifiers = ["", "'", "2"];
+    let scramble = "";
+    let lastMove = "";
+  
+    for (let i = 0; i < length; i++) {
+      let move = moves[Math.floor(Math.random() * moves.length)];
+  
+      // Evitar movimientos consecutivos en la misma cara
+      while (move === lastMove) {
+        move = moves[Math.floor(Math.random() * moves.length)];
+      }
+  
+      const modifier = modifiers[Math.floor(Math.random() * modifiers.length)];
+      scramble += `${move}${modifier} `;
+      lastMove = move;
+    }
+  
+    return scramble.trim(); // Elimina el espacio final
+  };
+
+  useEffect(() => {
+    const scrambleForSolve = generateScramble()
+    setScramble(scrambleForSolve)
+    setPreviousScramble(scrambleForSolve);
+  }, [])
+  
 
   const startStopTimer = () => {
     if (isRunning) {
-      if (timerRef.current) clearInterval(timerRef.current);
-      //aca va la logica de guardar el solve
       
+      const recordedTime = solveRef.current
+      const storedData = localStorage.getItem('cubingData');
+
+      if (storedData) {
+
+        const actualDate = new Date(Date.now())
+        const formattedDate = `${actualDate.getDate()} ${actualDate.toLocaleString('es-ES', { month: 'short' })} ${actualDate.getFullYear()}, ${actualDate.getHours().toString().padStart(2, '0')}:${actualDate.getMinutes().toString().padStart(2, '0')}:${actualDate.getSeconds().toString().padStart(2, '0')}hrs`;
+
+        const cubingData = JSON.parse(storedData);
+        const newTime = [recordedTime / 1000, scramble, formattedDate];
+        
+        const nextIndex = Object.keys(cubingData.session1).length + 1;
+        //cambiar esto para cada session
+        cubingData.session1[nextIndex] = newTime;
+        
+        localStorage.setItem('cubingData', JSON.stringify(cubingData));
+
+        // Generar un nuevo scramble al detener el timer
+        const newScramble = generateScramble();
+        setScramble(newScramble);
+        setPreviousScramble(newScramble); // Actualizamos el scramble anterior
+
+
+        if (timerRef.current) clearInterval(timerRef.current);
+      }
     } else {
-      setTime(0);
-      const startTime = Date.now();
-      timerRef.current = setInterval(() => {
-        setTime(Date.now() - startTime);
-      }, 10);
+        setTime(0);
+        solveRef.current = 0;
+        const startTime = Date.now();
+
+        timerRef.current = setInterval(() => {
+          const currentTime = Date.now() - startTime;
+          setTime(currentTime);
+          solveRef.current = currentTime; // Actualiza la referencia del tiempo
+        }, 10);
     }
     setIsRunning(!isRunning);
   };
 
   // Capturar evento de teclado
   useEffect(() => {
+    //agregar que tiene que mantener presionado y al soltarlo es cuando empieza
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.code === 'Space') {
         event.preventDefault(); 
@@ -51,8 +112,13 @@ const Main = () => {
   /*
   Funcionalidad basica:
   1. (LISTO) Si el temporizador esta parado, al presionar se tiene que: reiniciar el contador e iniciar nuevamente
-  2. Si el temporizador esta corriendo, cambiar la interfaz
-  3. Si se para el temporizador, volver a la interfaz anterior, cambiar el scramble, mostrar el tiempo, registrar el tiempo en la bd, crear una nueva timecard 
+  2. (LISTO) Si el temporizador esta corriendo, cambiar la interfaz
+  3. Si se para el temporizador, 
+    (LISTO) volver a la interfaz anterior, 
+    cambiar el scramble, 
+    (LISTO) mostrar el tiempo, 
+    (LISTO)registrar el tiempo en la bd, 
+    (LISTO)crear una nueva timecard 
   */
 
 
@@ -62,7 +128,7 @@ const Main = () => {
         {/* Scramble */}
         {isRunning
         ? <p></p>
-        : <p className='text-3xl'>U R2 B2 F2 U ’ R2 B2 U2 F2 U’ L2 U L R’ U B’ L R2 B’ R F</p> }
+        : <p className='text-3xl'>{scramble}</p> }
 
         {/* Tiempo */}
         <h1 className="text-8xl ">{formatTime(time)}</h1>

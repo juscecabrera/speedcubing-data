@@ -1,12 +1,11 @@
 'use client'
 
 import { createContext, useContext, useState, ReactNode } from 'react';
-import sessionDataJSON from '../data.json'
 
 // Interfaz para una sola sesión (entrada individual)
-interface SessionEntry {
-  [key: string]: (string | number)[]; 
-}
+// interface SessionEntry {
+//   [key: string]: (string | number)[]; 
+// }
 
 // Interfaz para el conjunto completo de datos de sesión
 // interface SessionData {
@@ -18,7 +17,7 @@ interface TimerContextType {
   setIsRunning: (running: boolean) => void;
   showDetails: string | null; // Guarda el ID del TimeCard seleccionado
   setshowDetails: (id: string | null) => void;
-  sessionData: SessionEntry;
+  sessionData: string | null;
   showStats: boolean;
   setshowStats: (running: boolean) => void;
 }
@@ -30,7 +29,16 @@ export const TimerProvider = ({ children }: { children: ReactNode }) => {
   const [showDetails, setshowDetails] = useState<string | null>(null);
   const [showStats, setshowStats] = useState<boolean>(false);
 
-  const sessionData: SessionEntry = sessionDataJSON.session1;
+
+  const storedData = localStorage.getItem('cubingData');
+
+  if (!storedData) {
+    //si no hay data, inicializarla
+    const cubingData = {session1: {}}
+    localStorage.setItem('cubingData', JSON.stringify(cubingData))
+  } 
+
+  const sessionData: string = storedData ? storedData : JSON.stringify({ session1: {} });
 
   return (
     <TimerContext.Provider value={{ isRunning, setIsRunning, showDetails, setshowDetails, sessionData, setshowStats, showStats }}>

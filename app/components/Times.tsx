@@ -5,8 +5,19 @@ import { useTimer } from '../contexts/TimerContext';
 
 const Times = () => {
   const { isRunning, sessionData } = useTimer()
-
-  const lastFiveEntries = Object.entries(sessionData).slice(-5).reverse();
+  
+  // Verificar que sessionData no es null o undefined antes de hacer el parse
+  let sessionDataJSON = {};
+  if (sessionData) {
+    try {
+      sessionDataJSON = JSON.parse(sessionData);
+    } catch (error) {
+      console.error('Error al parsear sessionData:', error);
+    }
+  }
+  
+  // Obtener las últimas 5 entradas
+  const lastFiveEntries = Object.entries(sessionDataJSON.session1 || {}).slice(-5).reverse();
 
   return (
     <div className='absolute bottom-0 w-full flex justify-center'>
