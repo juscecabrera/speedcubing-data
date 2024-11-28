@@ -15,6 +15,9 @@ const StatsSM = () => {
     setshowStats(true)
   };
 
+   // Comprobar que sessionData no es null antes de pasarlo a Stats
+   const validSessionData = sessionData ? JSON.parse(sessionData) : null;
+
   return (
     <div className='text-black bg-transparent'>
         {isRunning
@@ -49,10 +52,11 @@ const StatsSM = () => {
         </div>
         }
 
-        {showStats
-        ? <Stats setshowStats={setshowStats} sessionData={sessionData}/>
-        : <></>
-        }
+        {showStats && validSessionData ? (
+            <Stats setshowStats={setshowStats} sessionData={validSessionData} />
+        ) : (
+            <></>
+        )}
     </div>
   )
 }

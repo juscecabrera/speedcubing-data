@@ -3,11 +3,17 @@
 import TimeCard from './TimeCard'
 import { useTimer } from '../contexts/TimerContext';
 
+interface SessionData {
+  session1: {
+    [key: string]: [number, string, string]; // Los datos dentro de session1 tienen la forma [tiempo, scramble, fecha]
+  };
+}
+
 const Times = () => {
   const { isRunning, sessionData } = useTimer()
   
   // Verificar que sessionData no es null o undefined antes de hacer el parse
-  let sessionDataJSON = {};
+  let sessionDataJSON: SessionData = { session1: {} };
   if (sessionData) {
     try {
       sessionDataJSON = JSON.parse(sessionData);
