@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
 // Interfaz para una sola sesión (entrada individual)
 // interface SessionEntry {
@@ -29,8 +29,11 @@ export const TimerProvider = ({ children }: { children: ReactNode }) => {
   const [showDetails, setshowDetails] = useState<string | null>(null);
   const [showStats, setshowStats] = useState<boolean>(false);
 
-
-  const storedData = localStorage.getItem('cubingData');
+  let storedData
+  useEffect(() => {
+    storedData = localStorage.getItem('cubingData');
+  }, [])
+  
 
   if (!storedData) {
     //si no hay data, inicializarla
