@@ -19,6 +19,8 @@ interface TimerContextType {
   showDetails: string | null; // Guarda el ID del TimeCard seleccionado
   setshowDetails: (id: string | null) => void;
   sessionData: SessionEntry;
+  showStats: boolean;
+  setshowStats: (running: boolean) => void;
 }
 
 const TimerContext = createContext<TimerContextType | undefined>(undefined);
@@ -26,11 +28,12 @@ const TimerContext = createContext<TimerContextType | undefined>(undefined);
 export const TimerProvider = ({ children }: { children: ReactNode }) => {
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [showDetails, setshowDetails] = useState<string | null>(null);
+  const [showStats, setshowStats] = useState<boolean>(false);
 
   const sessionData: SessionEntry = sessionDataJSON.session1;
 
   return (
-    <TimerContext.Provider value={{ isRunning, setIsRunning, showDetails, setshowDetails, sessionData }}>
+    <TimerContext.Provider value={{ isRunning, setIsRunning, showDetails, setshowDetails, sessionData, setshowStats, showStats }}>
       {children}
     </TimerContext.Provider>
   );

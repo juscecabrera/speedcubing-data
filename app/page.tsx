@@ -10,7 +10,6 @@ export default function Home() {
         <Main />
         <Times />
         <StatsSM />
-
       </TimerProvider>
     </div>
   );

@@ -4,12 +4,16 @@ import Image from 'next/image'
 import arrowDown from '../svg/arrowDown.svg'
 import arrow from '../svg/arrow.svg'
 import { useTimer } from '../contexts/TimerContext';
+import Stats from './Stats';
 
 
 
 const StatsSM = () => {
-  const { isRunning } = useTimer()
+  const { isRunning, showStats, setshowStats, sessionData  } = useTimer()
 
+  const handleStats = () => {
+    setshowStats(true)
+  };
 
   return (
     <div className='text-black bg-transparent'>
@@ -31,7 +35,10 @@ const StatsSM = () => {
                 <p>a100 10.78</p>
             </div>
 
-            <button className='bg-speedblue border-2 border-black rounded-[20px] w-32 h-10 flex justify-center items-center'>
+            <button 
+                className='bg-speedblue border-2 border-black rounded-[20px] w-32 h-10 flex justify-center items-center'
+                onClick={handleStats}
+            >
                 <Image 
                     src={arrow}
                     alt='arrow'
@@ -40,6 +47,11 @@ const StatsSM = () => {
             </button>       
             
         </div>
+        }
+
+        {showStats
+        ? <Stats setshowStats={setshowStats} sessionData={sessionData}/>
+        : <></>
         }
     </div>
   )
