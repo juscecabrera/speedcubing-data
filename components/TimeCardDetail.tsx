@@ -1,11 +1,11 @@
 'use client'
 
 import React from 'react'
-import clipboard from '../svg/clipboard.svg'
-import deleteLogo from '../svg/delete.svg'
-import arrowSmall from '../svg/arrowSmall.svg'
+import clipboard from '../app/svg/clipboard.svg'
+import deleteLogo from '../app/svg/delete.svg'
+import arrowSmall from '../app/svg/arrowSmall.svg'
 import Image from 'next/image'
-import { useTimer } from '../contexts/TimerContext';
+import { useTimer } from '../app/contexts/TimerContext';
 
 interface TimeCardDetailProps {
     id: string;

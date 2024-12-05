@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react';
-import { useTimer } from '../contexts/TimerContext';
+import { useTimer } from '../app/contexts/TimerContext';
 
 const Main = () => {
   const [time, setTime] = useState<number>(0);

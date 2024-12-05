@@ -1,8 +1,8 @@
 'use client'
 
 import Image from 'next/image'
-import arrow from '../svg/arrow.svg'
-import { useTimer } from '../contexts/TimerContext'
+import arrow from '../app/svg/arrow.svg'
+import { useTimer } from '../app/contexts/TimerContext'
 import TimeCardDetail from './TimeCardDetail'
 
 interface TimeCardProps {

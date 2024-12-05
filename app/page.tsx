@@ -1,6 +1,6 @@
-import Main from "./components/Main";
-import Times from "./components/Times";
-import StatsSM from "./components/StatsSM";
+import Main from "../components/Main";
+import Times from "../components/Times";
+import StatsSM from "../components/StatsSM";
 import { TimerProvider } from "./contexts/TimerContext";
 
 /*

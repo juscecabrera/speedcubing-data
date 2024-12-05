@@ -1,9 +1,9 @@
 'use client'
 
 import Image from 'next/image'
-import arrowDown from '../svg/arrowDown.svg'
-import arrow from '../svg/arrow.svg'
-import { useTimer } from '../contexts/TimerContext';
+import arrowDown from '../app/svg/arrowDown.svg'
+import arrow from '../app/svg/arrow.svg'
+import { useTimer } from '../app/contexts/TimerContext';
 import Stats from './Stats';
 
 

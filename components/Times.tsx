@@ -2,7 +2,7 @@
 
 // import { useState, useEffect } from 'react';
 import TimeCard from './TimeCard'
-import { useTimer } from '../contexts/TimerContext';
+import { useTimer } from '../app/contexts/TimerContext';
 
 interface SessionData {
   session1: {

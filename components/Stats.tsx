@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import arrowSmall from '../svg/arrowSmall.svg'
+import arrowSmall from '../app/svg/arrowSmall.svg'
 
 
 interface SessionEntry {
