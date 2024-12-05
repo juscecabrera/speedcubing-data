@@ -26,7 +26,7 @@ export default function Home() {
       <TimerProvider>
         <Main />
         <Times />
-        <StatsSM />
+        {/* <StatsSM /> */}
       </TimerProvider>
     </div>
   );

@@ -1,26 +1,16 @@
 'use client'
 
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-
-// Interfaz para una sola sesión (entrada individual)
-// interface SessionEntry {
-//   [key: string]: (string | number)[]; 
-// }
-
-// Interfaz para el conjunto completo de datos de sesión
-// interface SessionData {
-//   [sessionName: string]: SessionEntry; // Permite múltiples sesiones (session1, session2, etc.)
-// }
-
+  
 interface TimerContextType {
   isRunning: boolean;
   setIsRunning: (running: boolean) => void;
-  showDetails: string | null; // Guarda el ID del TimeCard seleccionado
+  showDetails: string | null;
   setshowDetails: (id: string | null) => void;
-  sessionData: string | null;
+  sessionData: any[];  // Cambiado a array
+  setSessionData: (data: any[]) => void;
   showStats: boolean;
   setshowStats: (running: boolean) => void;
-  addTime: (newTime: any) => void; // Nueva función para agregar tiempos
 }
 
 const TimerContext = createContext<TimerContextType | undefined>(undefined);
@@ -29,36 +19,21 @@ export const TimerProvider = ({ children }: { children: ReactNode }) => {
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [showDetails, setshowDetails] = useState<string | null>(null);
   const [showStats, setshowStats] = useState<boolean>(false);
-  const [sessionData, setSessionData] = useState<string | null>(null);
+  const [sessionData, setSessionData] = useState<any[]>([]);
   
   useEffect(() => {
-    // Solo accedemos a localStorage en el cliente (navegador)
-    if (typeof window !== 'undefined') {
-      let storedData = localStorage.getItem('cubingData');
-      
-      if (!storedData) {
-        // Si no hay datos, inicializamos localStorage
-        const cubingData = { session1: {} };
-        localStorage.setItem('cubingData', JSON.stringify(cubingData));
-        storedData = JSON.stringify(cubingData);
-      }
+    const fetchData = async () => {
+      const response = await fetch(`/api/getData`)
+      const data = await response.json()
 
-      setSessionData(storedData);
-    }
-  }, []);
-
-  const addTime = (newTime: any) => {
-    const storedData = localStorage.getItem('cubingData');
-    if (storedData) {
-      const cubingData = JSON.parse(storedData);
-      const nextIndex = Object.keys(cubingData.session1).length + 1;
-      cubingData.session1[nextIndex] = newTime;
-      localStorage.setItem('cubingData', JSON.stringify(cubingData));
-    }
-  };
+      setSessionData(data)
+    };
+    
+    fetchData();
+  }, []); 
 
   return (
-    <TimerContext.Provider value={{ isRunning, setIsRunning, showDetails, setshowDetails, sessionData, setshowStats, showStats, addTime }}>
+    <TimerContext.Provider value={{ isRunning, setIsRunning, showDetails, setshowDetails, sessionData, setSessionData, showStats, setshowStats }}>
       {children}
     </TimerContext.Provider>
   );

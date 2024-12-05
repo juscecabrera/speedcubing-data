@@ -13,21 +13,7 @@ interface SessionData {
 const Times = () => {
   const { isRunning, sessionData } = useTimer()
   
-  // Estado local para almacenar los tiempos
-  // const [times, setTimes] = useState<[number, string, string][]>([]);
-
-  // Verificar que sessionData no es null o undefined antes de hacer el parse
-  let sessionDataJSON: SessionData = { session1: {} };
-  if (sessionData) {
-    try {
-      sessionDataJSON = JSON.parse(sessionData);
-    } catch (error) {
-      console.error('Error al parsear sessionData:', error);
-    }
-  }
-  
-  // Obtener las últimas 5 entradas
-  const lastFiveEntries = Object.entries(sessionDataJSON.session1 || {}).slice(-5).reverse();
+  const lastFiveEntries = Object.entries(sessionData || {}).slice(-5).reverse();
 
   return (
     <div className='absolute bottom-0 w-full flex justify-center'>
@@ -37,6 +23,7 @@ const Times = () => {
         {lastFiveEntries.map(([key, value]) => (
           <TimeCard key={key} id={key} data={value}/>
         ))}
+        {JSON.stringify(sessionData)}
       </div>
       }
 

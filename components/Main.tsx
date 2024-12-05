@@ -7,7 +7,7 @@ const Main = () => {
   const [time, setTime] = useState<number>(0);
   const [scramble, setScramble] = useState<string>('');
   const [previousScramble, setPreviousScramble] = useState<string>('');
-  const { isRunning, setIsRunning, addTime } = useTimer()
+  const { isRunning, setIsRunning } = useTimer()
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const solveRef = useRef<number>(0)
 
@@ -41,45 +41,54 @@ const Main = () => {
   }, [])
   
 
-  const startStopTimer = () => {
+  const startStopTimer = async () => {
     if (isRunning) {
-      
-      const recordedTime = solveRef.current
-      const storedData = localStorage.getItem('cubingData');
-
-      if (storedData) {
-
-        const actualDate = new Date(Date.now())
-        const formattedDate = `${actualDate.getDate()} ${actualDate.toLocaleString('es-ES', { month: 'short' })} ${actualDate.getFullYear()}, ${actualDate.getHours().toString().padStart(2, '0')}:${actualDate.getMinutes().toString().padStart(2, '0')}:${actualDate.getSeconds().toString().padStart(2, '0')}hrs`;
-
-        const cubingData = JSON.parse(storedData);
-        const newTime = [recordedTime / 1000, previousScramble, formattedDate];
+      const recordedTime = solveRef.current / 1000;  // Convertir ms a segundos
+      const actualDate = new Date();
+      const formattedDate = `${actualDate.getDate()} ${actualDate.toLocaleString('es-ES', { month: 'short' })} ${actualDate.getFullYear()}, ${actualDate.getHours().toString().padStart(2, '0')}:${actualDate.getMinutes().toString().padStart(2, '0')}:${actualDate.getSeconds().toString().padStart(2, '0')}hrs`;
+  
+      try {
+        const response = await fetch('/api/addSolve', 
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',  // Importante
+          },
+          body: JSON.stringify({
+            userId: 'user123',  // Reemplaza con el ID real del usuario
+            solveTime: recordedTime,
+            scramble: previousScramble,
+            date: formattedDate,
+          }),
+        });
         
-        // const nextIndex = Object.keys(cubingData.session1).length + 1;
-        // //cambiar esto para cada session
-        // cubingData.session1[nextIndex] = newTime;
-        addTime(newTime)
-        
-        localStorage.setItem('cubingData', JSON.stringify(cubingData));
-
-        // Generar un nuevo scramble al detener el timer
-        const newScramble = generateScramble();
-        setScramble(newScramble);
-        setPreviousScramble(newScramble); // Actualizamos el scramble anterior
-
-
-        if (timerRef.current) clearInterval(timerRef.current);
+  
+        if (!response.ok) {
+          throw new Error('Failed to add solve');
+        }
+  
+        console.log('Solve added successfully');
+      } catch (error) {
+        console.error('Error adding solve:', error);
       }
+  
+      // Reiniciar el temporizador y scramble
+      const newScramble = generateScramble();
+      setScramble(newScramble);
+      setPreviousScramble(newScramble);
+      
+      if (timerRef.current) clearInterval(timerRef.current);
     } else {
-        setTime(0);
-        solveRef.current = 0;
-        const startTime = Date.now();
-
-        timerRef.current = setInterval(() => {
-          const currentTime = Date.now() - startTime;
-          setTime(currentTime);
-          solveRef.current = currentTime; // Actualiza la referencia del tiempo
-        }, 10);
+      // Inicia el temporizador
+      setTime(0);
+      solveRef.current = 0;
+      const startTime = Date.now();
+  
+      timerRef.current = setInterval(() => {
+        const currentTime = Date.now() - startTime;
+        setTime(currentTime);
+        solveRef.current = currentTime;
+      }, 10);
     }
     setIsRunning(!isRunning);
   };
