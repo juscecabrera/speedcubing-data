@@ -1,34 +1,39 @@
 'use client'
 
 import Image from 'next/image'
+import { useEffect } from 'react';
 import arrow from '../app/svg/arrow.svg'
 import { useTimer } from '../app/contexts/TimerContext';
 import Stats from './Stats';
 import { averageOfN } from '@/utils/generateStats';
+import { useSession } from 'next-auth/react';
+
 
 const StatsSM = () => {
-  const { isRunning, isSpacePressed, showStats, setshowStats, sessionData, setSessionData, fetchSessionData, userSessionsData } = useTimer()
+  const { isRunning, isSpacePressed, showStats, setshowStats, sessionData, setSessionData, fetchSessionData, userSessionsData, userSessions } = useTimer()
+  const {data: session} = useSession()
 
   const handleStats = () => {
     setshowStats(true)
   };
 
   const totalSolves = sessionData ? sessionData.solves.length as number : 0
-  // const totalSolves = 0
-
 
   const ao5 = sessionData ? averageOfN(sessionData, 5) : ''
   const ao12 = sessionData ? averageOfN(sessionData, 12) : ''
   const ao100 = sessionData ? averageOfN(sessionData, 100) : ''
   const averageSession = sessionData ? averageOfN(sessionData,totalSolves) : ''
 
-  // const ao5 = 0
-  // const ao12 = 0
-  // const ao100 = 0
-  // const averageSession = 0
+  useEffect(() => {
+    let userEmail = session?.user?.email as string
+    userSessions(userEmail)
+  
+  }, [session])
+  
 
   //CREAR SESSION
   const createSession = async () => { 
+    let userEmail = session?.user?.email
     try {
         //1. CREA LA SESION
         const response = await fetch('/api/getData', {
@@ -37,7 +42,8 @@ const StatsSM = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            sessionName: 'Probando'
+            sessionName: 'Session 4',
+            userEmail
           }),
         });
     

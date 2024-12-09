@@ -3,8 +3,8 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
 interface Session {
-  _id: string; // ID único de la sesión
-  name: string; // Nombre de la sesión
+  _id: string;
+  name: string;
 }
 
 //Este es el array con los solves del modelo de mongodb
@@ -36,6 +36,7 @@ interface TimerContextType {
   setshowStats: (running: boolean) => void;
   fetchSessionData: (params?: string) => Promise<void>;
   userSessionsData: Session[];
+  userSessions: (params?: string) => Promise<void>;
 }
 
 const TimerContext = createContext<TimerContextType | undefined>(undefined);
@@ -48,18 +49,11 @@ export const TimerProvider = ({ children }: { children: ReactNode }) => {
   const [sessionData, setSessionData] = useState<SessionData | null>(null);
   const [userSessionsData, setUserSessionsData] = useState<Session[]>([])
 
-
   /* Aunque de repente puedo hacer para que los ultimos tiempos esten en un estado para facilitar el proceso de addSolve */
 
-  /**
-   * 1. Iniciar sesion: si ya esta iniciada entonces pasar al siguiente paso
-   * 2. Fetch de userSessions
-   * 3. Ponerlo en StatsSM para poder seleccionar session
-   */
-  const userSessions = async (params?: string) => {
+  const userSessions = async (params?: object | string) => {
     try {
-      // const url = params ? `/api/getData/users/${params}` : `/api/getData/users`;
-      const url = `/api/getData/users/675739548a187c96fb2854bd`
+      const url = `/api/getData/users/${params}`
   
       const response = await fetch(url);
   
@@ -96,7 +90,6 @@ export const TimerProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     fetchSessionData()
-    userSessions()
   }, []); 
 
   return (
@@ -112,7 +105,8 @@ export const TimerProvider = ({ children }: { children: ReactNode }) => {
       isSpacePressed, 
       setIsSpacePressed,
       fetchSessionData,
-      userSessionsData
+      userSessionsData,
+      userSessions
     }}>
       {children}
     </TimerContext.Provider>

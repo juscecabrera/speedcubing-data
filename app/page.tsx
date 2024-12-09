@@ -1,15 +1,15 @@
 import Main from "../components/Main";
 import Times from "../components/Times";
 import StatsSM from "../components/StatsSM";
+import NavBar from "@/components/NavBar";
 import { TimerProvider } from "./contexts/TimerContext";
+import Provider from "@/components/Provider";
 
 /*
 Por hacer:
 1. Agregar autenticacion y quitar hardcodeado
 2. Poder modificar soluciones (DNF, +2, Copiar, eliminar, etc)
 3. Agregar tiempo de inspeccion
-
-
 
 
 7. Arreglar las posiciones de los botones
@@ -23,11 +23,12 @@ Por algun motivo esta el solve 5 veces en prod
 export default function Home() {
   return (
     <div className="bg-speedblue text-white font-jetbrains">
-      <TimerProvider>
-        <Main />
-        <Times />
-        <StatsSM />
-      </TimerProvider>
+        <TimerProvider>
+          <NavBar />
+          <Main />
+          <Times />
+          <StatsSM />
+        </TimerProvider>
     </div>
   );
 }

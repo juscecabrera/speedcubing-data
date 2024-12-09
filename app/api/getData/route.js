@@ -20,9 +20,7 @@ export const GET = async () => {
 //CREAR SESION
 export const POST = async (req) => {
     try {
-        // const { sessionName } = await req.json();
-        const sessionName = 'Session 2'
-        let userIdExample = "675739548a187c96fb2854bd"
+        const { sessionName, userEmail } = await req.json();
 
         await connectToDB();
 
@@ -30,7 +28,7 @@ export const POST = async (req) => {
 
         await newSession.save();
 
-        const user = await User.findById(userIdExample);
+        const user = await User.findOne({ email: userEmail });
 
         if (!user) {
             return new Response(JSON.stringify({ message: 'User not found' }), { status: 404 });
