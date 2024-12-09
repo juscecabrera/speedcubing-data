@@ -24,6 +24,8 @@ interface TimerContextType {
   setshowDetails: (id: string | null) => void;
   sessionData: SessionData | null; // Changed to a single object
   setSessionData: (data: SessionData) => void;
+  setIsSpacePressed: (running: boolean) => void;
+  isSpacePressed: boolean;
   showStats: boolean;
   setshowStats: (running: boolean) => void;
 }
@@ -34,6 +36,7 @@ export const TimerProvider = ({ children }: { children: ReactNode }) => {
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [showDetails, setshowDetails] = useState<string | null>(null);
   const [showStats, setshowStats] = useState<boolean>(false);
+  const [isSpacePressed, setIsSpacePressed] = useState<boolean>(false);
   const [sessionData, setSessionData] = useState<SessionData | null>(null);
   
   useEffect(() => {
@@ -48,7 +51,7 @@ export const TimerProvider = ({ children }: { children: ReactNode }) => {
   }, []); 
 
   return (
-    <TimerContext.Provider value={{ isRunning, setIsRunning, showDetails, setshowDetails, sessionData, setSessionData, showStats, setshowStats }}>
+    <TimerContext.Provider value={{ isRunning, setIsRunning, showDetails, setshowDetails, sessionData, setSessionData, showStats, setshowStats, isSpacePressed, setIsSpacePressed }}>
       {children}
     </TimerContext.Provider>
   );

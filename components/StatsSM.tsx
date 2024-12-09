@@ -8,7 +8,7 @@ import Stats from './Stats';
 import { averageOfN } from '@/utils/generateStats';
 
 const StatsSM = () => {
-  const { isRunning, showStats, setshowStats, sessionData } = useTimer()
+  const { isRunning, isSpacePressed, showStats, setshowStats, sessionData } = useTimer()
 
   const handleStats = () => {
     setshowStats(true)
@@ -24,7 +24,7 @@ const StatsSM = () => {
 
   return (
     <div className='text-black bg-transparent'>
-        {isRunning
+        {isRunning || isSpacePressed
         ? <></>
         : 
         <div className='absolute bottom-0 left-0 flex flex-col items-center w-60 h-[380px] bg-white border-black border-2 rounded-r-[20px] p-4'>

@@ -4,7 +4,7 @@ import TimeCard from './TimeCard'
 import { useTimer } from '../app/contexts/TimerContext';
 
 const Times = () => {
-  const { isRunning, sessionData } = useTimer()
+  const { isRunning, sessionData, isSpacePressed } = useTimer()
 
   const solves = sessionData?.solves
   
@@ -12,7 +12,7 @@ const Times = () => {
 
   return (
     <div className='absolute bottom-0 w-full flex justify-center'>
-      {isRunning ? <></>
+      {isRunning || isSpacePressed ? <></>
       :
       <div className='flex flex-row'>
         {lastFiveEntries.map(([key, value]) => (
