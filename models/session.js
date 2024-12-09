@@ -1,6 +1,11 @@
 import { Schema, model, models } from 'mongoose';
 
 const SessionSchema = new Schema({
+  name: {
+    type: String, 
+    required: true, 
+    default: "New Session"
+  },
   solves: [
     {
       solveTime: { type: Number, required: true },  

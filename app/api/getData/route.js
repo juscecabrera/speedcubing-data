@@ -9,9 +9,26 @@ export const GET = async () => {
         const sessionData = await Session.findOne({ sessionIdExample })
         if (!sessionData) return new Response('Session not found', {status: 404})
 
-        // const sessionData  = [[12.00]]
         return new Response(JSON.stringify(sessionData), { status: 200 })
 
+    } catch (error) {
+        return new Response(JSON.stringify(error), { status: 500 })
+    }
+}
+
+//este es para crear sesiones
+export const POST = async (req) => {
+    try {
+        const { sessionName } = await req.json();
+
+        await connectToDB();
+
+        let newSession = sessionName ? new Session({name: sessionName, solves: []}) : new Session({ solves: [] });
+
+        await newSession.save();
+        
+        return new Response(JSON.stringify(newSession._id.toString()), { status: 200 });
+        
     } catch (error) {
         return new Response(JSON.stringify(error), { status: 500 })
     }
