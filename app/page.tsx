@@ -3,13 +3,14 @@ import Times from "../components/Times";
 import StatsSM from "../components/StatsSM";
 import NavBar from "@/components/NavBar";
 import { TimerProvider } from "./contexts/TimerContext";
-import Provider from "@/components/Provider";
 
 /*
 Por hacer:
-1. Agregar autenticacion y quitar hardcodeado
+1. Que si no hay una sesion iniciada, que use localStorage o que no cargue o te pida iniciar sesion
 2. Poder modificar soluciones (DNF, +2, Copiar, eliminar, etc)
+4. Que el ux sea mil veces mas rapido: como? hacerlo localmente, modificando el ux y luego el back
 3. Agregar tiempo de inspeccion
+
 
 
 7. Arreglar las posiciones de los botones
