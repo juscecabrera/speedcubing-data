@@ -7,25 +7,25 @@ import Stats from './Stats';
 import { averageOfN } from '@/utils/generateStats';
 
 const StatsSM = () => {
-  const { isRunning, isSpacePressed, showStats, setshowStats, sessionData, setSessionData, fetchSessionData } = useTimer()
+  const { isRunning, isSpacePressed, showStats, setshowStats, sessionData, setSessionData, fetchSessionData, userSessionsData } = useTimer()
 
   const handleStats = () => {
     setshowStats(true)
   };
 
-//   const totalSolves = sessionData ? sessionData.solves.length as number : 0
-  const totalSolves = 0
+  const totalSolves = sessionData ? sessionData.solves.length as number : 0
+  // const totalSolves = 0
 
 
-//   const ao5 = sessionData ? averageOfN(sessionData, 5) : ''
-//   const ao12 = sessionData ? averageOfN(sessionData, 12) : ''
-//   const ao100 = sessionData ? averageOfN(sessionData, 100) : ''
-//   const averageSession = sessionData ? averageOfN(sessionData,totalSolves) : ''
+  const ao5 = sessionData ? averageOfN(sessionData, 5) : ''
+  const ao12 = sessionData ? averageOfN(sessionData, 12) : ''
+  const ao100 = sessionData ? averageOfN(sessionData, 100) : ''
+  const averageSession = sessionData ? averageOfN(sessionData,totalSolves) : ''
 
-  const ao5 = 0
-  const ao12 = 0
-  const ao100 = 0
-  const averageSession = 0
+  // const ao5 = 0
+  // const ao12 = 0
+  // const ao100 = 0
+  // const averageSession = 0
 
   //CREAR SESSION
   const createSession = async () => { 
@@ -49,7 +49,7 @@ const StatsSM = () => {
 
         //2. CAMBIA LOS SOLVES A LA NUEVA SESSION
         if (sessionId) fetchSessionData(sessionId.toString())
-    
+            
         console.log('Session created successfully');
       } catch (error) {
         console.error('Error adding session:', error);
@@ -57,10 +57,13 @@ const StatsSM = () => {
   }
 
   const handleSessionChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
-    if (event.target.value === "New Session") {
+    if (event.target.value === "Create Session") {
       createSession();
+    } else {
+      fetchSessionData(event.target.value)
     }
   };
+  
 
   return (
     <div className='text-black bg-transparent'>
@@ -69,10 +72,14 @@ const StatsSM = () => {
         : 
         <div className='absolute bottom-0 left-0 flex flex-col items-center w-60 h-[380px] bg-white border-black border-2 rounded-r-[20px] p-4'>
             <div className='my-4 rounded-3xl border-2 border-black w-full h-10 flex justify-center items-center px-4'>
-                
+            
                 <select name="sessions" id="sessions" onChange={handleSessionChange}>
-                    <option value="Session">Session 1</option>
-                    <option value="New Session">New Session</option>
+                {userSessionsData.map((session, key) => (
+                  <option key={key} value={session._id}>
+                    {session.name}
+                  </option>
+                ))}
+                    <option value="Create Session" className='text-green-700 text-center'>+</option>
                 </select>
 
             </div>

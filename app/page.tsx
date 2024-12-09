@@ -5,10 +5,12 @@ import { TimerProvider } from "./contexts/TimerContext";
 
 /*
 Por hacer:
-1. Poder tener multiples sesiones
+1. Agregar autenticacion y quitar hardcodeado
 2. Poder modificar soluciones (DNF, +2, Copiar, eliminar, etc)
 3. Agregar tiempo de inspeccion
-4. Agregar autenticacion
+
+
+
 
 7. Arreglar las posiciones de los botones
 4. Poder exportar e importar los tiempos

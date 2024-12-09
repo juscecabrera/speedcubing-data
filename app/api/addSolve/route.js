@@ -5,20 +5,11 @@ export const POST = async (req) => {
   try {
     const { solveTime, scramble, date, sessionId } = await req.json();
 
-    
     if (!solveTime || !scramble || !date) {
       return new Response(JSON.stringify({ error: 'Datos incompletos' }), { status: 400 });
     }
 
     await connectToDB();
-
-    /*
-    1. Crear usuarios
-    2. Tener modelos de userId
-    3. Conectar sesiones con usuarios
-    4. Poder modificar las sesiones de los usuarios, no crear nuevas.
-    Cada usuario debe tener sesiones referenciadas, luego cada sesion debe tener un array con todas las soluciones
-    */
 
     let existingSession = await Session.findById(sessionId);
 

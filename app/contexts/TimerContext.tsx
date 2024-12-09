@@ -2,6 +2,11 @@
 
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
+interface Session {
+  _id: string; // ID único de la sesión
+  name: string; // Nombre de la sesión
+}
+
 //Este es el array con los solves del modelo de mongodb
 interface Solve {
   solveTime: number;
@@ -12,6 +17,7 @@ interface Solve {
 //Este es el modelo de mongodb
 interface SessionData {
   _id: string;
+  name: string;
   solves: Solve[];
   createdAt: string;
   updatedAt: string;
@@ -29,6 +35,7 @@ interface TimerContextType {
   showStats: boolean;
   setshowStats: (running: boolean) => void;
   fetchSessionData: (params?: string) => Promise<void>;
+  userSessionsData: Session[];
 }
 
 const TimerContext = createContext<TimerContextType | undefined>(undefined);
@@ -39,14 +46,34 @@ export const TimerProvider = ({ children }: { children: ReactNode }) => {
   const [showStats, setshowStats] = useState<boolean>(false);
   const [isSpacePressed, setIsSpacePressed] = useState<boolean>(false);
   const [sessionData, setSessionData] = useState<SessionData | null>(null);
+  const [userSessionsData, setUserSessionsData] = useState<Session[]>([])
 
 
-  //La mejor manera seria hacer el fetch en context y luego darle la funcion a los otros componentes. De esta manera tengo:
+  /* Aunque de repente puedo hacer para que los ultimos tiempos esten en un estado para facilitar el proceso de addSolve */
+
   /**
-   * 1. Main: add solve y luego hacer el fetch
-   * 2. StatsSM: crear sesion y hacer el fetch
-   * 3. TimerContext: hacer el fetch apenas inicia la sesion, luego hacerlo cada que agregas un nuevo tiempo. Aunque de repente puedo hacer para que los ultimos tiempos esten en un estado para facilitar el proceso de addSolve
+   * 1. Iniciar sesion: si ya esta iniciada entonces pasar al siguiente paso
+   * 2. Fetch de userSessions
+   * 3. Ponerlo en StatsSM para poder seleccionar session
    */
+  const userSessions = async (params?: string) => {
+    try {
+      // const url = params ? `/api/getData/users/${params}` : `/api/getData/users`;
+      const url = `/api/getData/users/675739548a187c96fb2854bd`
+  
+      const response = await fetch(url);
+  
+      if (!response.ok) {
+        throw new Error(`Failed to fetch user data: ${response.statusText}`);
+      }
+  
+      const data = await response.json();
+  
+      setUserSessionsData(data)
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  }
 
 
   const fetchSessionData = async (params?: string) => {
@@ -61,7 +88,6 @@ export const TimerProvider = ({ children }: { children: ReactNode }) => {
   
       const data = await response.json();
   
-      //el id de la session es data._id
       setSessionData(data);
     } catch (error) {
       console.error('Error fetching session data:', error);
@@ -70,6 +96,7 @@ export const TimerProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     fetchSessionData()
+    userSessions()
   }, []); 
 
   return (
@@ -84,7 +111,8 @@ export const TimerProvider = ({ children }: { children: ReactNode }) => {
       setshowStats, 
       isSpacePressed, 
       setIsSpacePressed,
-      fetchSessionData
+      fetchSessionData,
+      userSessionsData
     }}>
       {children}
     </TimerContext.Provider>

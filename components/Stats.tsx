@@ -10,10 +10,11 @@ interface Solve {
   }
   
 interface SessionData {
-_id: string;
-solves: Solve[];
-createdAt: string;
-updatedAt: string;
+    _id: string;
+    name: string;
+    solves: Solve[];
+    createdAt: string;
+    updatedAt: string;
 }
 
 const Stats = ({ setshowStats, sessionData }:{setshowStats: (running: boolean) => void , sessionData: SessionData}) => {
@@ -44,6 +45,9 @@ const Stats = ({ setshowStats, sessionData }:{setshowStats: (running: boolean) =
   const worstAo100 = bestWorstAverageOfN(sessionData, 100)[1]
 
 
+  
+  const sesssionName = sessionData.name
+  
 
 
   return (
@@ -53,6 +57,7 @@ const Stats = ({ setshowStats, sessionData }:{setshowStats: (running: boolean) =
         >
             <div className='flex flex-col justify-between items-center gap-5'>
                 <p className='text-2xl border-black border-b-2 w-1/2'>Stats</p>
+                <p className='text-2xl w-1/2'>{sesssionName}</p>
                 <p className='text-3xl'>{totalSolves}</p>
                 <p className='text-lg'>{initialDate} - {finalDate}</p>
                 <p className='inline'>Single: {bestSingle} / {worstSingle}</p>

@@ -11,7 +11,6 @@ const Main = () => {
   const [previousScramble, setPreviousScramble] = useState<string>('');
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const solveRef = useRef<number>(0)
-  // const [isSpacePressed, setIsSpacePressed] = useState(false);
 
   useEffect(() => {
     const scrambleForSolve = generateScramble()
@@ -89,7 +88,6 @@ const Main = () => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.code === 'Space') {
         setIsSpacePressed(true);
-        // console.log("Espacio presionado");
       }
     };
 
@@ -97,7 +95,6 @@ const Main = () => {
       if (event.code === 'Space') {
         setIsSpacePressed(false); 
         startStopTimer()
-        // console.log("Espacio liberado");
       }
     };
 
