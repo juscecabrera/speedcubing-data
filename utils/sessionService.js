@@ -1,4 +1,4 @@
-import Session from '../models/user.js';  // Importa el modelo de sesión
+import Session from '../models/session.js';  // Importa el modelo de sesión
 
 export const getSessionSolves = async (userId) => {
   try {

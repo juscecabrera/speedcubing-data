@@ -1,14 +1,29 @@
 'use client'
 
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-  
+
+//Este es el array con los solves del modelo de mongodb
+interface Solve {
+  solveTime: number;
+  scramble: string;
+  date: string;
+}
+
+//Este es el modelo de mongodb
+interface SessionData {
+  _id: string;
+  solves: Solve[];
+  createdAt: string;
+  updatedAt: string;
+}
+
 interface TimerContextType {
   isRunning: boolean;
   setIsRunning: (running: boolean) => void;
   showDetails: string | null;
   setshowDetails: (id: string | null) => void;
-  sessionData: any[];  // Cambiado a array
-  setSessionData: (data: any[]) => void;
+  sessionData: SessionData | null; // Changed to a single object
+  setSessionData: (data: SessionData) => void;
   showStats: boolean;
   setshowStats: (running: boolean) => void;
 }
@@ -19,7 +34,7 @@ export const TimerProvider = ({ children }: { children: ReactNode }) => {
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [showDetails, setshowDetails] = useState<string | null>(null);
   const [showStats, setshowStats] = useState<boolean>(false);
-  const [sessionData, setSessionData] = useState<any[]>([]);
+  const [sessionData, setSessionData] = useState<SessionData | null>(null);
   
   useEffect(() => {
     const fetchData = async () => {
