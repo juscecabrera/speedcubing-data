@@ -11,6 +11,7 @@ const Main = () => {
   const { isRunning, setIsRunning, setSessionData } = useTimer()
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const solveRef = useRef<number>(0)
+  const [isSpacePressed, setIsSpacePressed] = useState(false);
 
   useEffect(() => {
     const scrambleForSolve = generateScramble()
@@ -78,25 +79,45 @@ const Main = () => {
     setIsRunning(!isRunning);
   };
 
- // Capturar evento de teclado
- useEffect(() => {
-  // Aseguramos que este código solo se ejecute en el navegador
-  const handleKeyDown = (event: KeyboardEvent) => {
-    if (event.code === 'Space') {
-      event.preventDefault();
-      startStopTimer();
-    }
-  };
+  // Detectar cuando la barra espaciadora es presionada y mantenida
+   // Detectar cuando la barra espaciadora es presionada y mantenida
+   useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.code === 'Space') {
+        if (!isSpacePressed) {
+          console.log("Espacio presionado");
+          setIsSpacePressed(true);
+          setIsRunning(true)
+          if (isRunning) {
+            setIsRunning(false)
+            startStopTimer()
+          }
+        }
+      }
+    };
 
-  document.addEventListener('keydown', handleKeyDown);
-  return () => document.removeEventListener('keydown', handleKeyDown);
-}, [isRunning]);
+    const handleKeyUp = (event: KeyboardEvent) => {
+      if (event.code === 'Space') {
+        setIsSpacePressed(false); 
+        console.log("Espacio liberado");
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, [isSpacePressed]); 
+
 
   return (
     <div className='w-screen h-screen flex flex-col justify-center items-center'>
       <div className='flex flex-col justify-center items-center gap-16'>
         {isRunning ? <></> : <p className='text-3xl'>{scramble}</p> }
-        <h1 className="text-8xl ">{formatTime(time)}</h1>
+        <h1 className={`text-8xl ${isSpacePressed ? "text-red-600" : "text-white"}`}>{formatTime(time)}</h1>
       </div>
     </div>
   )
