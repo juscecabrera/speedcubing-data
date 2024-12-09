@@ -31,3 +31,22 @@ export const formatTime = (ms: number) => {
     return `${minutes}:${seconds.padStart(5, '0')}`; // Muestra minutos:segundos
   }
 };
+
+export const formatMongoDBDate = (isoDate: string): string => {
+  const date = new Date(isoDate);
+  
+  const options: Intl.DateTimeFormatOptions = {
+    day: 'numeric',
+    month: 'short', // Shortened month name (e.g., "dic")
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  };
+
+  // Use Intl.DateTimeFormat to format the date
+  const formattedDate = new Intl.DateTimeFormat('es-ES', options).format(date);
+  
+  // Add "hrs" at the end of the formatted string
+  return `${formattedDate.replace(',', '')}hrs`;
+};

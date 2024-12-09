@@ -5,18 +5,22 @@ import arrowDown from '../app/svg/arrowDown.svg'
 import arrow from '../app/svg/arrow.svg'
 import { useTimer } from '../app/contexts/TimerContext';
 import Stats from './Stats';
-
-
+import { averageOfN } from '@/utils/generateStats';
 
 const StatsSM = () => {
-  const { isRunning, showStats, setshowStats, sessionData  } = useTimer()
+  const { isRunning, showStats, setshowStats, sessionData } = useTimer()
 
   const handleStats = () => {
     setshowStats(true)
   };
 
-   // Comprobar que sessionData no es null antes de pasarlo a Stats
-   const validSessionData = sessionData ? JSON.parse(sessionData) : null;
+  const totalSolves = sessionData?.solves.length as number
+
+
+  const ao5 = sessionData ? averageOfN(sessionData, 5) : ''
+  const ao12 = sessionData ? averageOfN(sessionData, 12) : ''
+  const ao100 = sessionData ? averageOfN(sessionData, 100) : ''
+  const averageSession = sessionData ? averageOfN(sessionData,totalSolves) : ''
 
   return (
     <div className='text-black bg-transparent'>
@@ -28,14 +32,14 @@ const StatsSM = () => {
             <p>Sesion 1 </p>
                 <Image src={arrowDown} alt='arrowdown' className='col-start-3 col-end-3'/>
             </div>
-            <p className='text-2xl'>599/598</p>
+            <p className='text-2xl'>{totalSolves}</p>
             <div className='bg-black h-[1px] w-full'></div>
 
             <div className='flex flex-col gap-4 items-center p-4 text-2xl'>
-                <p>avg 10.85</p>
-                <p>a5 12.25</p>
-                <p>a12 11.11</p>
-                <p>a100 10.78</p>
+                <p>avg {averageSession}</p>
+                <p>a5 {ao5}</p>
+                <p>a12 {ao12}</p>
+                <p>a100 {ao100}</p>
             </div>
 
             <button 
@@ -52,8 +56,8 @@ const StatsSM = () => {
         </div>
         }
 
-        {showStats && validSessionData ? (
-            <Stats setshowStats={setshowStats} sessionData={validSessionData} />
+        {showStats && sessionData ? (
+            <Stats setshowStats={setshowStats} sessionData={sessionData} />
         ) : (
             <></>
         )}

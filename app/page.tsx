@@ -1,6 +1,6 @@
 import Main from "../components/Main";
 import Times from "../components/Times";
-// import StatsSM from "../components/StatsSM";
+import StatsSM from "../components/StatsSM";
 import { TimerProvider } from "./contexts/TimerContext";
 
 /*
@@ -24,7 +24,7 @@ export default function Home() {
       <TimerProvider>
         <Main />
         <Times />
-        {/* <StatsSM /> */}
+        <StatsSM />
       </TimerProvider>
     </div>
   );
