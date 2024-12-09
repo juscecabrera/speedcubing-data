@@ -1,6 +1,6 @@
 import Main from "../components/Main";
 import Times from "../components/Times";
-import StatsSM from "../components/StatsSM";
+// import StatsSM from "../components/StatsSM";
 import { TimerProvider } from "./contexts/TimerContext";
 
 /*
@@ -15,8 +15,6 @@ Por hacer:
 7. Arreglar las posiciones de los botones
 8. Agregar tiempo de inspeccion
 9. Agregar autenticacion
-
-
 */
 
 

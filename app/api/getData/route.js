@@ -1,7 +1,7 @@
 import { connectToDB } from '../../../utils/database'
 import Session from '../../../models/session';
 
-export const GET = async (req) => {
+export const GET = async () => {
     try {
         await connectToDB();
         let sessionIdExample = "67562cc1788b35b647c9a0fd"
@@ -13,6 +13,6 @@ export const GET = async (req) => {
         return new Response(JSON.stringify(sessionData), { status: 200 })
 
     } catch (error) {
-        return new Response({ status: 500 })
+        return new Response(JSON.stringify(error), { status: 500 })
     }
 }
