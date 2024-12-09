@@ -3,8 +3,9 @@ import Session from '../../../models/session';
 
 export const POST = async (req) => {
   try {
-    const { solveTime, scramble, date } = await req.json();
+    const { solveTime, scramble, date, sessionId } = await req.json();
 
+    
     if (!solveTime || !scramble || !date) {
       return new Response(JSON.stringify({ error: 'Datos incompletos' }), { status: 400 });
     }
@@ -19,15 +20,12 @@ export const POST = async (req) => {
     Cada usuario debe tener sesiones referenciadas, luego cada sesion debe tener un array con todas las soluciones
     */
 
-    let sessionIdExample = "67562cc1788b35b647c9a0fd"
-
-    let existingSession = await Session.findOne({ sessionIdExample });
+    let existingSession = await Session.findById(sessionId);
 
     //esto es para primeros usuarios: se les creara una primera sesion vacia, asi siempre va a haber por lo menos una sesion en el usuario 
     if (!existingSession) {
       existingSession = new Session({ solves: [] });
     }
-
     existingSession.solves.push({solveTime, scramble, date});
 
     await existingSession.save();

@@ -7,7 +7,7 @@ import Stats from './Stats';
 import { averageOfN } from '@/utils/generateStats';
 
 const StatsSM = () => {
-  const { isRunning, isSpacePressed, showStats, setshowStats, sessionData, setSessionData } = useTimer()
+  const { isRunning, isSpacePressed, showStats, setshowStats, sessionData, setSessionData, fetchSessionData } = useTimer()
 
   const handleStats = () => {
     setshowStats(true)
@@ -27,9 +27,10 @@ const StatsSM = () => {
   const ao100 = 0
   const averageSession = 0
 
-
+  //CREAR SESSION
   const createSession = async () => { 
     try {
+        //1. CREA LA SESION
         const response = await fetch('/api/getData', {
           method: 'POST',
           headers: {
@@ -46,15 +47,8 @@ const StatsSM = () => {
         
         const sessionId = await response.json()
 
-        const fetchNewData = async () => {
-          const response = await fetch(`/api/getData/${sessionId.toString()}`);
-          const data = await response.json();
-    
-          console.log(data)
-          setSessionData(data);
-        };
-    
-        if (sessionId) fetchNewData();
+        //2. CAMBIA LOS SOLVES A LA NUEVA SESSION
+        if (sessionId) fetchSessionData(sessionId.toString())
     
         console.log('Session created successfully');
       } catch (error) {

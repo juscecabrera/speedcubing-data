@@ -16,7 +16,7 @@ export const GET = async () => {
     }
 }
 
-//este es para crear sesiones
+//CREAR SESION
 export const POST = async (req) => {
     try {
         const { sessionName } = await req.json();

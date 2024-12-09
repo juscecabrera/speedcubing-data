@@ -5,7 +5,7 @@ import { useTimer } from '../app/contexts/TimerContext';
 import { generateScramble, formatTime } from '@/utils/generateScramble';
 
 const Main = () => {
-  const { isRunning, setIsRunning, setSessionData, isSpacePressed, setIsSpacePressed } = useTimer()
+  const { isRunning, setIsRunning, sessionData, setSessionData, isSpacePressed, setIsSpacePressed, fetchSessionData } = useTimer()
   const [time, setTime] = useState<number>(0);
   const [scramble, setScramble] = useState<string>('');
   const [previousScramble, setPreviousScramble] = useState<string>('');
@@ -49,6 +49,8 @@ const Main = () => {
     const actualDate = new Date();
     const formattedDate = `${actualDate.getDate()} ${actualDate.toLocaleString('es-ES', { month: 'short' })} ${actualDate.getFullYear()}, ${actualDate.getHours().toString().padStart(2, '0')}:${actualDate.getMinutes().toString().padStart(2, '0')}:${actualDate.getSeconds().toString().padStart(2, '0')}hrs`;
   
+    const sessionId = sessionData?._id
+
     try {
       const response = await fetch('/api/addSolve', {
         method: 'POST',
@@ -56,6 +58,7 @@ const Main = () => {
           solveTime: recordedTime,
           scramble: previousScramble,
           date: formattedDate,
+          sessionId: sessionId
         }),
       });
   
@@ -63,14 +66,7 @@ const Main = () => {
         throw new Error('Failed to add solve');
       }
   
-      const fetchData = async () => {
-        const response = await fetch(`/api/getData`);
-        const data = await response.json();
-  
-        setSessionData(data);
-      };
-  
-      fetchData();
+      fetchSessionData(sessionId)
   
       console.log('Solve added successfully');
     } catch (error) {
